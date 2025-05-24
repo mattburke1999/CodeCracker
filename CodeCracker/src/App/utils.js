@@ -98,10 +98,10 @@ function get1CorrectRightPlace(code) {
 }
 
 const codeFuncs = [
-    {func: getNothingCorrect, texts: ['No Correct #s']},
-    {func: get1CorrectRightPlace, texts: ['One Correct #, Right Place']},
-    {func: get1CorrectWrongPlace, texts: ['One Correct #, Wrong Place']},
-    {func: get2CorrectWrongPlaces, texts: ['Two Correct #s, Wrong Places']},
+    {func: getNothingCorrect, text: 'No Correct #s'},
+    {func: get1CorrectRightPlace, text: 'One Correct #, Right Place'},
+    {func: get1CorrectWrongPlace, text: 'One Correct #, Wrong Place'},
+    {func: get2CorrectWrongPlaces, text: 'Two Correct #s, Wrong Places'},
 ];
 
 const extraCodeFuncs = codeFuncs.slice(1);
@@ -109,41 +109,64 @@ const extraCodeFuncs = codeFuncs.slice(1);
 const colors = ['#ff0000', '#00ff00', '#0000ff', '#da0ef5', '#ff7b00']
 
 function easyHints() {
-    return [...codeFuncs, {func: getNothingCorrect, texts: ['No Correct #s']}]
+    return [...codeFuncs, {func: getNothingCorrect, text: 'No Correct #s'}]
+}
+
+function checkEasy(hints) {
+    const noc = hints.filter(item => item.text === 'No Correct #s');
+    const firstHint = noc[0].value;
+    const secondHint = noc[1].value;
+    let numSame = 0;
+    for (let i = 0; i < firstHint.length; i++) {
+        if(secondHint.includes(firstHint[i])) {
+            numSame++;
+        }
+    }
+    return numSame < 2;
 }
 
 function normalHints() {
     const extraFunc = extraCodeFuncs[Math.floor(Math.random()*extraCodeFuncs.length)];
-    return [...codeFuncs, {func: extraFunc.func, texts: extraFunc.texts}];
+    return [...codeFuncs, {func: extraFunc.func, text: extraFunc.text}];
 }
 
 function hardHints() {
     const extraFunc1 = extraCodeFuncs[Math.floor(Math.random()*extraCodeFuncs.length)];
     const extraFunc2 = extraCodeFuncs[Math.floor(Math.random()*extraCodeFuncs.length)];
-    return [...extraCodeFuncs, {func: extraFunc1.func, texts: extraFunc1.texts}, {func: extraFunc2.func, texts: extraFunc2.texts}];
+    return [...extraCodeFuncs, {func: extraFunc1.func, text: extraFunc1.text}, {func: extraFunc2.func, text: extraFunc2.text}];
 }
 
-function getHints(code, mode) {
-    let funcs = [];
-    switch (mode) {
-        case 'Easy':
-            funcs = easyHints();
-            break;
-        default:
-        case 'Normal':
-            funcs = normalHints();
-            break;
-        case 'Hard':
-            funcs = hardHints();
-            break;
-    }
+function finalizeHints(funcs, code) {
     funcs = funcs.sort(() => Math.random() - 0.5);
     funcs.forEach((item, index) => {
         item.value = item.func(code);
         item.color = colors[index];
         item.lastOne = index === 4;
     });
-    return funcs
+    return funcs;
+}
+
+
+function getHints(code, mode) {
+    let hints = [];
+    switch (mode) {
+        case 'Easy':
+            hints = easyHints();
+            break;
+        default:
+        case 'Normal':
+            hints = normalHints();
+            break;
+        case 'Hard':
+            hints = hardHints();
+            break;
+    }
+    hints = finalizeHints(hints, code);
+    while (mode === 'Easy' && !checkEasy(hints)) {
+        hints = easyHints();
+        hints = finalizeHints(hints, code);
+    }
+    return hints;
 }
 
 export { getCode, getHints };

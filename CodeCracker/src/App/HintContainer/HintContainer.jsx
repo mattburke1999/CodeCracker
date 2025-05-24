@@ -29,7 +29,7 @@ export default function HintContainer({ code, mode }) {
             {hints.map((hint, index) => (
                 <Hint
                     key={index}
-                    hintTexts={hint.texts}
+                    hintText={hint.text}
                     hintValue={hint.value.join('')}
                     color={hint.color}
                     lastOne={hint.lastOne}
