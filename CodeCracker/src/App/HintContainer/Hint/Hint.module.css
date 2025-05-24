@@ -1,0 +1,37 @@
+.hint {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-top: 1px solid #ccc;
+    padding-top: 1rem;
+}
+
+.hint.lastOne {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 1rem;
+}
+
+.hintText {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    font-size: 1.2em;
+    width: 410px;
+}
+
+.hintCode {
+    font-size: 1.75em;
+    font-weight: bold;
+    width: 100px;
+}
+
+@media screen and (max-width: 768px) {
+    .hintText {
+        width: 250px;
+    }
+    .hintCode {
+        width: 80px;
+    }
+    
+}
