@@ -1,4 +1,5 @@
 # CodeCracker
 Simple code cracker game written with react.
 
-https://mattburke1999.github.io/CodeCracker/
+<a href="https://mattburke1999.github.io/CodeCracker/" target="_blank" rel="noopener noreferrer">CodeCracker</a>
+
