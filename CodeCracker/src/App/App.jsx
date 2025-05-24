@@ -70,7 +70,8 @@ function App() {
             margin: 0,
             border: '1px solid #ccc',
             borderRadius: '4px',
-            padding: '0.5rem 1rem'
+            padding: '0.5rem 1rem',
+            backgroundColor: 'white',
         },
         actionsStyles: {
             display: 'flex',
