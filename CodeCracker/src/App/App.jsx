@@ -5,30 +5,43 @@ import { getCode } from './utils'
 import HintContainer from './HintContainer/HintContainer'
 import Logo from './Logo'
 import Guess from './Guess/Guess'
+import ModeSelector from './ModeSelector/ModeSelector'
 
 function App() {
 
+    const modes = ['Easy', 'Normal', 'Hard'];
     
     const [code, setCode] = useState([]);
     const [guessCount, setGuessCount] = useState(0);
     const [guess, setGuess] = useState('');
-    const [correct, setCorrect] = useState(false);
+    const [correct, setCorrect] = useState(0);
+    const [mode, setMode] = useState(modes[1]); 
 
     const resetCode = () => {
         const code = getCode();
         setCode(code);
     }
 
+    const changeMode = (newMode) => {
+        setMode(newMode);
+        playAgain();
+    }
+
     const playAgain = () => {
         resetCode();
         setGuessCount(0);
         setGuess('');
-        setCorrect(false);
+        setCorrect(0);
+    }
+
+    const giveUp = () => {
+        setCorrect(2)
+        setGuess(code.join(''));
     }
 
     const makeGuess = () => {
         if (guess === code.join('')) {
-            setCorrect(true);
+            setCorrect(1);
         } else {
             setGuess('');
         }
@@ -43,20 +56,29 @@ function App() {
         }
     }
 
-    const mainStyles = {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'flex-start',
-        height: '100%',
-        gap: '1rem'
-    }
-
-    const guessCountStyles = {
-        margin: 0,
-        border: '1px solid #ccc',
-        borderRadius: '4px',
-        padding: '0.5rem 1rem'
+    const styles = {
+        mainStyles: {
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+            height: '100%',
+            gap: '1rem',
+            paddingTop: '2rem',
+        },
+        guessCountStyles: {
+            margin: 0,
+            border: '1px solid #ccc',
+            borderRadius: '4px',
+            padding: '0.5rem 1rem'
+        },
+        actionsStyles: {
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '.5rem'
+        }
     }
 
 
@@ -65,11 +87,12 @@ function App() {
     }, [])
 
     return (
-        <div style={mainStyles}>
+        <div style={styles.mainStyles}>
             <Logo />
-            <h2 style={guessCountStyles}>Guesses: {guessCount}</h2>
-            <HintContainer code={code}/>
-            <Guess guessCount={guessCount} handleClick={handleClick} correct={correct} guess={guess} setGuess={setGuess}/>
+            <h2 style={styles.guessCountStyles}>Guesses: {guessCount}</h2>
+            <ModeSelector modes={modes} mode={mode} changeMode={changeMode}/>
+            <HintContainer code={code} mode={mode}/>
+            <Guess guessCount={guessCount} handleClick={handleClick} correct={correct} guess={guess} setGuess={setGuess} playAgain={playAgain} giveUp={giveUp}/>
         </div>
     )
 }

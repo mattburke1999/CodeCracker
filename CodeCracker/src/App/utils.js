@@ -99,18 +99,45 @@ function get1CorrectRightPlace(code) {
 
 const codeFuncs = [
     {func: getNothingCorrect, texts: ['No Correct #s']},
-    {func: get1CorrectRightPlace, texts: ['One Correct #', 'Right Place']},
-    {func: get1CorrectWrongPlace, texts: ['One Correct #', 'Wrong Place']},
-    {func: get2CorrectWrongPlaces, texts: ['Two Correct #s', 'Wrong Places']},
+    {func: get1CorrectRightPlace, texts: ['One Correct #, Right Place']},
+    {func: get1CorrectWrongPlace, texts: ['One Correct #, Wrong Place']},
+    {func: get2CorrectWrongPlaces, texts: ['Two Correct #s, Wrong Places']},
 ];
 
 const extraCodeFuncs = codeFuncs.slice(1);
 
 const colors = ['#ff0000', '#00ff00', '#0000ff', '#da0ef5', '#ff7b00']
 
-function getHints(code) {
+function easyHints() {
+    return [...codeFuncs, {func: getNothingCorrect, texts: ['No Correct #s']}]
+}
+
+function normalHints() {
     const extraFunc = extraCodeFuncs[Math.floor(Math.random()*extraCodeFuncs.length)];
-    const funcs = [...codeFuncs, {func: extraFunc.func, texts: extraFunc.texts}].sort(() => Math.random() - 0.5);
+    return [...codeFuncs, {func: extraFunc.func, texts: extraFunc.texts}];
+}
+
+function hardHints() {
+    const extraFunc1 = extraCodeFuncs[Math.floor(Math.random()*extraCodeFuncs.length)];
+    const extraFunc2 = extraCodeFuncs[Math.floor(Math.random()*extraCodeFuncs.length)];
+    return [...extraCodeFuncs, {func: extraFunc1.func, texts: extraFunc1.texts}, {func: extraFunc2.func, texts: extraFunc2.texts}];
+}
+
+function getHints(code, mode) {
+    let funcs = [];
+    switch (mode) {
+        case 'Easy':
+            funcs = easyHints();
+            break;
+        default:
+        case 'Normal':
+            funcs = normalHints();
+            break;
+        case 'Hard':
+            funcs = hardHints();
+            break;
+    }
+    funcs = funcs.sort(() => Math.random() - 0.5);
     funcs.forEach((item, index) => {
         item.value = item.func(code);
         item.color = colors[index];

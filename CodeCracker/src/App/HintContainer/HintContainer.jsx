@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
 
-import Hint from './Hint';
+import Hint from './Hint/Hint';
 
 import { getHints } from '../utils';
 
-export default function HintContainer({code}) {
+export default function HintContainer({ code, mode }) {
 
     const [hints, setHints] = useState([]);
 
@@ -18,11 +18,11 @@ export default function HintContainer({code}) {
 
     useEffect(() => {
         if(code && code.length > 0) {
-            const newHints = getHints(code);
+            const newHints = getHints(code, mode);
             setHints(newHints);
             console.log('hints', hints);
         }
-    }, [code])
+    }, [code, mode])
 
     return (
         <div style={styles}>
