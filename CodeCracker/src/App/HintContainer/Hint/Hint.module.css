@@ -28,7 +28,7 @@
 
 @media screen and (max-width: 768px) {
     .hintText {
-        width: 250px;
+        width: 225px;
     }
     .hintCode {
         width: 80px;
